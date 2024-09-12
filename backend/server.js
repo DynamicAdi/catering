@@ -30,6 +30,7 @@ const app = express();
 
 const port = process.env.PORT || 7000;
 const MONGO_URI = process.env.MONGO_URI;
+const URL = process.env.FRONTEND_URL;
 
 const connection = () => {
   mongoose
@@ -79,7 +80,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.redirect("http://localhost:5173");
+  res.redirect(URL);
 });
 
 app.post('/admins/new', async function(req, res) {

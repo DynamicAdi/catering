@@ -3,7 +3,7 @@ import './../sass/Login.scss';
 import guru from '../../../public/logo.png'
 import axios from 'axios';
 
-function Login() {
+function Login({backend}) {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -11,7 +11,7 @@ function Login() {
     const handleCalls = async () => {
 
         if (password.length > 8 && email.length > 0) {
-            await axios.post('http://localhost:8080/admins/new', {
+            await axios.post(`${backend}/admins/new`, {
                 name: name,
                 email: email,
                 password: password

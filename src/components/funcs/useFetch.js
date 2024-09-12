@@ -2,14 +2,14 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import useAuth from "./useAuth";
 
-export function readData(endpoint, tabName) {
+export function readData(backend, endpoint, tabName) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
   const [isLoading, setLoading] = useState(true);
-  let url = `http://localhost:8080/${endpoint}`;
+  let url = `${backend}/${endpoint}`;
 
   if (tabName) {
-    url = `http://localhost:8080/${endpoint}/${tabName}`;
+    url = `${backend}/${endpoint}/${tabName}`;
   }
   const options = {
     method: "GET",
@@ -57,13 +57,13 @@ export function readData(endpoint, tabName) {
 //   if (user && user._id) {
 //     if (action === "read") {
 //       const res = await axios.post(
-//         "http://localhost:8080/read-user-food-plates",
+//         "${backend}/read-user-food-plates",
 //         { userId: user._id }
 //       );
 //       if (res.data.plates.length > 0) return res.data.plates;
 //     }
 //     if (action === "add" && plates) {
-//      await axios.post("http://localhost:8080/create-user-food-plates", {
+//      await axios.post("${backend}/create-user-food-plates", {
 //         userId: user._id,
 //         plates,
 //       });

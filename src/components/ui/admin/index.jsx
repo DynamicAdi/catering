@@ -14,14 +14,14 @@ import axios from "axios";
 import { GoListUnordered } from "react-icons/go";
 import { Link, useNavigate } from "react-router-dom";
 
-function Dashboard({logout}) {
+function Dashboard({logout, backend}) {
   const tabs = [
     { title: "Admins", icon: RiAdminLine },
     { title: "Foods", icon: IoFastFoodOutline },
     { title: "Orders", icon: GoListUnordered },
   ];
   const [activeTab, setActiveTab] = useState(tabs[2].title);
-  const { data = [], isLoading, error, reFetch } = readData(activeTab);
+  const { data = [], isLoading, error, reFetch } = readData(backend, activeTab);
 
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -59,18 +59,18 @@ function Dashboard({logout}) {
   }, [activeTab]);
 
   const handleEdit = async (action, id) => {
-    let url = "http://localhost:8080/search";
+    let url = `${backend}/search`;
     let METHOD = "POST";
     try {
       setLoading(true);
       if (action === "delete") {
-        url = `http://localhost:8080/delete`;
+        url = `${backend}/delete`;
       }
       if (action === "edit") {
-        url = `http://localhost:8080/search`;
+        url = `${backend}/search`;
       }
       if (action === "update") {
-        url = `http://localhost:8080/update`;
+        url = `${backend}/update`;
         METHOD = "PUT";
       }
 
@@ -113,7 +113,7 @@ function Dashboard({logout}) {
 
   const handleUpdate = async (id) => {
     try {
-      const response = await axios.put(`http://localhost:8080/update`, {
+      const response = await axios.put(`${backend}/update`, {
         id: id,
         name: name,
         description: description,
@@ -131,7 +131,7 @@ function Dashboard({logout}) {
   };
 
   const handleUserUpdate = async (id) => {
-    const response = await axios.put(`http://localhost:8080/users/update`, {
+    const response = await axios.put(`${backend}/users/update`, {
       id: id,
       name: name,
       email: email,
@@ -147,14 +147,14 @@ function Dashboard({logout}) {
     let method = "GET";
 
     if (action === "read") {
-      (url = `http://localhost:8080/catogery`), (method = "GET");
+      (url = `${backend}/catogery`), (method = "GET");
     } else if (action === "create") {
-      (url = `http://localhost:8080/catogery/create`), (method = "POST");
+      (url = `${backend}/catogery/create`), (method = "POST");
     } else if (action === "delete") {
-      url = `http://localhost:8080/catogery/delete`;
+      url = `${backend}/catogery/delete`;
       method = "DELETE";
     } else if (action === "update") {
-      (url = `http://localhost:8080/catogery/update`), (method = "PUT");
+      (url = `${backend}/catogery/update`), (method = "PUT");
     }
 
     const options = {
@@ -174,7 +174,7 @@ function Dashboard({logout}) {
   };
   const handleCreate = async () => {
     try {
-      const response = await axios.post(`http://localhost:8080/createFood`, {
+      const response = await axios.post(`${backend}/createFood`, {
         name: name,
         description: description,
         price: price,
@@ -223,7 +223,7 @@ function Dashboard({logout}) {
   }
 
   const handleStatus = async (id, value) => {
-      const requst = await axios.put(`http://localhost:8080/status`, {
+      const requst = await axios.put(`${backend}/status`, {
         id: id,
         status: value,
       })

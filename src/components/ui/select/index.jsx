@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./styles.scss";
 
-function Selection() {
+function Selection({backend}) {
   const [categories, setCategories] = useState([]);
 
   const getCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/catogery");
+      const response = await axios.get(`${backend}/catogery`);
       if (response.status === 200) {
         setCategories(response.data);
       } else {
@@ -36,7 +36,7 @@ function Selection() {
             >
               <div key={index} className="imgContainer">
                 <img
-                  src="https://picsum.photos/1080/1920?random=1"
+                  src={category.image}
                   alt={category.name}
                 />
                 <div className="popUp">

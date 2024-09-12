@@ -4,12 +4,12 @@ import Render from "../components/render/Render";
 import Tea from "../components/ui/loader/tea";
 import Navbar from "../components/ui/navbar";
 
-function App() {
+function App({backend}) {
   return (
     <>
       <Suspense fallback={<Tea />}>
       <Navbar />
-        <Render />
+        <Render backend={backend}/>
       </Suspense>
     </>
   );

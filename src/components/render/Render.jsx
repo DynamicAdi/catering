@@ -5,7 +5,7 @@ import Selection from "../ui/select/index";
 import CameraAnimation from "./AnimatedCam";
 import { Simple } from "./Simple";
 
-function Render() {
+function Render({backend}) {
 
   return (
     <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
@@ -19,7 +19,7 @@ function Render() {
             </div>
 
             <div style={{ width: "100vw", position: "relative" }}>
-              <Selection />
+              <Selection backend={backend}  />
             </div>
           </Scroll>
         </ScrollControls>

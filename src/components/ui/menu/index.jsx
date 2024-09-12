@@ -7,7 +7,7 @@ import { useArray } from "../../funcs/context";
 import "./styles.scss";
 import Navbar from "../navbar";
 
-function MenuItems({ category, isVeg }) {
+function MenuItems({ backend, category, isVeg }) {
   const [menu, setMenu] = useState([]);
   const [menuItems, setMenuItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(category || "");
@@ -36,7 +36,7 @@ function MenuItems({ category, isVeg }) {
 
   const fetchMenuData = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8080/catogery");
+      const { data } = await axios.get(`${backend}/catogery`);
       setMenu(data);
     } catch (error) {
       console.error("Failed to fetch menu data", error);
@@ -55,7 +55,7 @@ function MenuItems({ category, isVeg }) {
 
   const fetchMenuItems = async () => {
     try {
-      let url = "http://localhost:8080/Foods";
+      let url = `${backend}/Foods`;
       if (selectedCategory) url += `/${selectedCategory}`;
       const { data } = await axios.get(url);
       // console.log(data);

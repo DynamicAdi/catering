@@ -1,8 +1,8 @@
 import React from 'react'
 
-function Update() {
+function Update({backend}) {
     const handleEdit = async (id) => {
-        let url = 'http://localhost:8080/search';
+        let url = `${backend}/search`;
         try  {
           setLoading(true);
     
