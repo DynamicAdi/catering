@@ -16,11 +16,6 @@ import Login from "./components/pages/Login.jsx";
 import Admin from "./components/pages/Admin.jsx";
 
 const URL = import.meta.env.VITE_BACKEND_URL
-// console.log(BACKEND);
-
-// const URL = "https://catering-axn8.onrender.com"
-
-// console.log(URL);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
