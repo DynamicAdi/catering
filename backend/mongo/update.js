@@ -1,4 +1,4 @@
-import foodModel, { adminModel } from "./schema.js";
+import foodModel, { adminModel, corporateModel } from "./schema.js";
 
 export const updateFood = (
   id,
@@ -9,10 +9,11 @@ export const updateFood = (
   rating,
   isVeg,
   catogery,
+  isPopular
 ) => {
   return foodModel.findOneAndUpdate(
     { _id: id },
-    { name, description, price, image, rating, isVeg, catogery },
+    { name, description, price, image, rating, isVeg, catogery, isPopular },
     { new: true }
   );
 };
@@ -61,3 +62,18 @@ export async function updateUserFoodPlate(userId, plateId, action) {
     return { status: 500, message: "Internal server error" };
   }
 }
+
+
+
+export const updateCorporate = async (
+  id,
+  title,
+  description,
+  image,
+  discountedPrice,
+  actualPrice,
+  isVeg,
+  tags,
+  items) => {
+  return corporateModel.findByIdAndUpdate({ _id: id }, { title: title, description: description, image: image, discountedPrice: discountedPrice, actualPrice: actualPrice, isVeg: isVeg, tags: tags, items: items});
+};

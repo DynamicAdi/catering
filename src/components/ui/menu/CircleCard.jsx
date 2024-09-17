@@ -1,9 +1,9 @@
 import React from "react";
-import { useArray } from "../../funcs/context.jsx";
+import { useArray } from "../../../../../guru/src/funcs/context.jsx";
 import "./styles.scss";
 
 function CircleCard({ id, image, title, description }) {
-  const { myArray, addToArray, removeFromArray, isInArray } = useArray();
+  const { myArray, addToArray, isInArray } = useArray();
 
   const handleAdd = (item) => {
     if (isInArray(item.id)) {
@@ -12,9 +12,6 @@ function CircleCard({ id, image, title, description }) {
     addToArray({ ...item, quantity: 1 });
   };
 
-  const handleRemove = (item) => {
-    removeFromArray(item.id);
-  };
 
   const item = { id, image, title, description };
   const itemIsInArray = isInArray(id);

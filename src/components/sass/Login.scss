@@ -64,7 +64,7 @@ form {
     background: rgba(136, 126, 126, 0.04);
     padding: 10px 20px;
     border: none;
-    border-radius: 20px;
+    border-radius: 8px;
     outline: none;
     box-sizing: border-box;
     border: 2px solid rgba(116, 116, 116, 0.247);
@@ -83,14 +83,16 @@ form {
       
       .submit {
     position: absolute;
-    bottom: -25%;
-    left: 35%;
-    width: fit-content;
+    bottom: -40%;
+    left: 12%;
+    // inset: 0;
+    width: 75%;
     height: fit-content;
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: 8px;
     color: #fff;
-    background: linear-gradient(to right, rgb(255, 180, 40), rgb(255, 206, 116));
+    background-color: $primary;
+    // background: linear-gradient(to right, rgb(255, 180, 40), rgb(255, 206, 116));
     border: 0;
     padding: 10px 40px;
     font-size: 16px;

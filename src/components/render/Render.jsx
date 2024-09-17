@@ -10,19 +10,7 @@ function Render({backend}) {
   return (
     <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
       <Canvas>
-        <ScrollControls pages={2} damping={1} style={{scrollbarWidth: 'none'}}>
-          <CameraAnimation />
           <Simple />
-          <Scroll html>
-            <div style={{ width: "100vw", height: "100vh" }}>
-              <Home />
-            </div>
-
-            <div style={{ width: "100vw", position: "relative" }}>
-              <Selection backend={backend}  />
-            </div>
-          </Scroll>
-        </ScrollControls>
       </Canvas>
     </div>
   );

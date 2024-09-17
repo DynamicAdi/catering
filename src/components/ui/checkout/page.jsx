@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useArray } from "../../funcs/context";
+import { useArray } from "../../../../../guru/src/funcs/context";
 import "./styles.scss";
 
 function Checkout({

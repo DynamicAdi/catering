@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import useAuth from "./useAuth";
 
 export function readData(backend, endpoint, tabName) {
   const [data, setData] = useState([]);
@@ -49,24 +48,3 @@ export function readData(backend, endpoint, tabName) {
 
   return { data, isLoading, error, reFetch };
 }
-
-// export const readAndAddFoodPlates = async (action, plates) => {
-//   // eslint-disable-next-line react-hooks/rules-of-hooks
-//   const { user } = useAuth();
-
-//   if (user && user._id) {
-//     if (action === "read") {
-//       const res = await axios.post(
-//         "${backend}/read-user-food-plates",
-//         { userId: user._id }
-//       );
-//       if (res.data.plates.length > 0) return res.data.plates;
-//     }
-//     if (action === "add" && plates) {
-//      await axios.post("${backend}/create-user-food-plates", {
-//         userId: user._id,
-//         plates,
-//       });
-//     }
-//   }
-// };

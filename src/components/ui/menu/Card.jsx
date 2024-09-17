@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa6";
-import { useArray } from "../../funcs/context";
+import { useArray } from "../../../../../guru/src/funcs/context";
 
 function Card({ items }) {
   const { myArray, addToArray, removeFromArray } = useArray();

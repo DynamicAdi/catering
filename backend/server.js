@@ -12,16 +12,20 @@ import {
   readOrders,
   readCatogery,
   readAllFoods,
+  readCorporate,
+  readDetailsCorporate,
+  readAllCorporate,
 } from "./mongo/read.js";
 import {
   CreateFood,
   Catogery,
   createOrders,
   createAdmins,
+  createCorporate,
 } from "./mongo/create.js";
 
-import { deleteData } from "./mongo/delete.js";
-import { updateFood, updateUser } from "./mongo/update.js";
+import { deleteData, removeCorporate } from "./mongo/delete.js";
+import { updateCorporate, updateFood, updateUser } from "./mongo/update.js";
 import foodModel, { adminModel, orderModel } from "./mongo/schema.js";
 
 dotenv.config();
@@ -141,7 +145,7 @@ app.post("/catogery/create", async (req, res) => {
 });
 
 app.put("/update", async (req, res) => {
-  const { id, name, description, price, image, rating, isVeg, catogery } = req.body;
+  const { id, name, description, price, image, rating, isVeg, catogery, isPopular } = req.body;
   await updateFood(
     id,
     name,
@@ -150,7 +154,8 @@ app.put("/update", async (req, res) => {
     image,
     rating,
     isVeg,
-    catogery
+    catogery,
+    isPopular
   );
   res.send({
     message: "Data updated successfully",
@@ -165,6 +170,11 @@ app.get("/Admins", async (req, res) => {
 
 app.get("/Foods", async (req, res) => {
   const food = await readAllFoods();
+  res.send(food);
+});
+
+app.get("/popular", async (req, res) => {
+  const food = await foodModel.find({ isPopular: true });
   res.send(food);
 });
 
@@ -195,12 +205,51 @@ app.put("/users/update", async (req, res) => {
 });
 
 app.post("/createFood", async (req, res) => {
-  const { name, description, price, image, rating, isVeg, catogery } = req.body;
-  await CreateFood(name, description, price, image, rating, isVeg, catogery);
+  const { name, description, price, image, rating, isVeg, catogery, isPopular } = req.body;
+  await CreateFood(name, description, price, image, rating, isVeg, catogery, isPopular);
   res.send({
     message: "Data added successfully",
   });
 });
+
+app.get('/Corporate', async (req, res) => {
+  const response = await readAllCorporate();
+  if (response) {
+      res.send(response);  
+  }
+})
+
+app.get('/CorporateList', async (req, res) => {
+    const response = await readCorporate();
+    if (response) {
+        res.send(response);  
+    }
+})
+app.get('/corporateDetails/id=:id', async (req, res) => {
+  const { id } = req.params;
+  const response = await readDetailsCorporate(id);
+  if (response) {
+      res.send(response);  
+  }
+})
+
+app.post('/addCorporate', async (req, res) => {
+  const { name, description, image, actualPrice, discountedPrice, isVeg, tags, items } = req.body;
+  await createCorporate(name, description, image, actualPrice, discountedPrice, isVeg, tags, items);
+  res.send({ message: "Data added successfully" });
+})
+
+app.post('/updateCorporate', async (req, res) => {
+  const {id, name, description, image, actualPrice, discountedPrice, isVeg, tags, items } = req.body;
+  const resp = await updateCorporate(id, name, description, image, actualPrice, discountedPrice, isVeg, tags, items);
+  res.send({ message: "Data Updated successfully", data: resp });
+})
+
+app.post("/deleteCorporate", async (req, res) => {
+  const { id } = req.body;
+  await removeCorporate(id);
+  res.send({ message: "Data deleted successfully" });
+})
 
 app.post("/plate", async (req, res) => {
   const data = req.body;
@@ -248,5 +297,6 @@ app.put('/status', async (req, res) => {
   await orderModel.updateOne({ _id: id }, { $set: { status: status } });
   res.send({ message: "Updated successfully" });
 })
+
 
 connection();

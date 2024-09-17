@@ -3,7 +3,7 @@ import axios from "axios";
 import CircleCard from "./CircleCard";
 import Card from "./Card";
 import Checkout, { EventDetails } from "../checkout/page";
-import { useArray } from "../../funcs/context";
+import { useArray } from "../../../../../guru/src/funcs/context";
 import "./styles.scss";
 import Navbar from "../navbar";
 
@@ -136,14 +136,6 @@ function MenuItems({ backend, category, isVeg }) {
               >
                 Checkout
               </button>
-              {/* <button
-                className={`event-details-button ${
-                  active ? "visible" : "nextPhase"
-                }`}
-                onClick={() => setShowEventDetails(true)}
-              >
-                Event Details
-              </button> */}
             </div>
           </div>
           <div className="child">

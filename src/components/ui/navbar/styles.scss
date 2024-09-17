@@ -3,7 +3,6 @@
 .navbar {
   width: 100%;
   height: auto;
-  // background-color: rebeccapurple;
   @include flex(space-between, center, row);
   position: relative;
   z-index: 9;

@@ -53,6 +53,11 @@ const foodSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isPopular: {
+    type: Boolean,
+    required: false,
+    default: false,
+  }
 });
 
 const foodModel = new mongoose.model("foods", foodSchema);
@@ -68,10 +73,6 @@ const orderItemSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    quantity: {
-      type: Number,
-      required: true,
-    },
     description: {
       type: String,
       required: false,
@@ -84,27 +85,27 @@ const orderItemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const foodOrdersSchema = new mongoose.Schema({
-  userId: {
-    type: String,
-    required: true,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: Number,
-    required: true,
-  },
-  orders: [orderItemSchema],
-  date: {
-    type: String,
-    required: true,
-  },
-});
+// const foodOrdersSchema = new mongoose.Schema({
+//   userId: {
+//     type: String,
+//     required: true,
+//   },
+//   address: {
+//     type: String,
+//     required: true,
+//   },
+//   phone: {
+//     type: Number,
+//     required: true,
+//   },
+//   orders: [orderItemSchema],
+//   date: {
+//     type: String,
+//     required: true,
+//   },
+// });
 
-export const foodOrdersModel = mongoose.model("foodOrders", foodOrdersSchema);
+// export const foodOrdersModel = mongoose.model("foodOrders", foodOrdersSchema);
 
 const Orders = new mongoose.Schema({
   name: {
@@ -140,7 +141,7 @@ const Orders = new mongoose.Schema({
     required: false,
   },
   items: {
-    type: [orderItemSchema],
+    type: [],
     required: true,
   },
   date: {
@@ -167,3 +168,41 @@ const catogerySchema = new mongoose.Schema({
 });
 
 export const catogeryModel = mongoose.model("catogery", catogerySchema);
+
+
+const Corporate = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: [String],
+    required: true,
+  },
+  actualPrice: {
+    type: Number,
+    required: true,
+  },
+  discountedPrice: {
+    type: Number,
+    required: true,
+  },
+  isVeg: {
+    type: Boolean,
+    required: false,
+  },
+  tags: {
+    type: [String],
+    required: false,
+  },
+  items: {
+    type: [],
+    required: true,
+  }
+})
+
+export const corporateModel = mongoose.model("corporate", Corporate);

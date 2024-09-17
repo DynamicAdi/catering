@@ -1,4 +1,4 @@
-import foodModel, { adminModel } from "./schema.js";
+import foodModel, { adminModel, corporateModel } from "./schema.js";
 
 export async function deleteFood(foodId) {
   return await foodModel.deleteOne({ _id: foodId });
@@ -10,6 +10,12 @@ export async function deleteData(endpoint, id) {
   }
   if (endpoint === "Admins") {
     return await adminModel.deleteOne({ _id: id });
+  }
+  if (endpoint === "Corporate") {
+    return await corporateModel.deleteOne({ _id: id });
+  }
+  if (endpoint === "Popular") {
+    return await foodModel.findByIdAndUpdate({ _id: id }, { isPopular: false });
   }
 }
 
@@ -29,4 +35,8 @@ export async function removeUserFoodPlate(userId) {
     console.error("Error removing food plate:", e);
     return { status: 500 };
   }
+}
+
+export const removeCorporate = async (id) => {
+  return await corporateModel.deleteOne({ _id: id });
 }

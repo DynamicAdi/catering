@@ -1,8 +1,9 @@
 import foodModel, {
-  foodOrdersModel,
+  // foodOrdersModel,
   catogeryModel,
   orderModel,
-  adminModel
+  adminModel,
+  corporateModel
 } from "./schema.js";
 export async function CreateFood(
   name,
@@ -60,59 +61,87 @@ export const createOrders = async (
   }
 };
 
-export async function createFoodOrders(
-  userId,
-  address,
-  phoneNumber,
-  orders,
-  date
-) {
-  // console.log(userId, address, phoneNumber, orders, date);
+
+export const createCorporate = async (
+  title,
+  description,
+  image,
+  actualPrice,
+  discountedPrice,
+  isVeg,
+  tags,
+  items,
+) => {
   try {
-    const existingOrder = await foodOrdersModel.findOne({ userId });
-
-    if (existingOrder) {
-      orders.forEach((newItem) => {
-        const existingItem = existingOrder.orders.find(
-          (item) => item.id === newItem.id
-        );
-
-        if (existingItem) {
-          existingItem.quantity = existingItem.quantity + newItem.quantity;
-        } else {
-          existingOrder.orders.push(newItem);
-        }
-      });
-      // existingOrder.orders = [...existingOrder.orders, ...orders];
-      existingOrder.address = address;
-      existingOrder.phoneNumber = phoneNumber;
-      existingOrder.date = date;
-
-      await existingOrder.save();
-      // console.log("New Food order placed successfully!");
-
-      return { message: "New Food order placed successfully!", status: 200 };
-    } else {
-      const newOrder = new foodOrdersModel({
-        userId,
-        address,
-        phone: phoneNumber,
-        orders, // expected to be an array of ordered food items
-        date,
-      });
-      await newOrder.save();
-      // console.log("Food order placed successfully!");
-      return { message: "Food order placed successfully!", status: 201 };
-    }
+    const corporate = new corporateModel({
+      title: title,
+      description: description,
+      image: image,
+      actualPrice: actualPrice,
+      discountedPrice: discountedPrice,
+      isVeg: isVeg,
+      tags: tags,
+      items: items,
+    });
+    await corporate.save();
   } catch (e) {
-    console.error("Error creating food order:", e);
-    // throw e;
-    return {
-      message: "Something went wrong, please try again!",
-      status: 500,
-    };
+    console.log("error" + e);
   }
 }
+
+// export async function createFoodOrders(
+//   userId,
+//   address,
+//   phoneNumber,
+//   orders,
+//   date
+// ) {
+//   // console.log(userId, address, phoneNumber, orders, date);
+//   try {
+//     const existingOrder = await foodOrdersModel.findOne({ userId });
+
+//     if (existingOrder) {
+//       orders.forEach((newItem) => {
+//         const existingItem = existingOrder.orders.find(
+//           (item) => item.id === newItem.id
+//         );
+
+//         if (existingItem) {
+//           existingItem.quantity = existingItem.quantity + newItem.quantity;
+//         } else {
+//           existingOrder.orders.push(newItem);
+//         }
+//       });
+//       // existingOrder.orders = [...existingOrder.orders, ...orders];
+//       existingOrder.address = address;
+//       existingOrder.phoneNumber = phoneNumber;
+//       existingOrder.date = date;
+
+//       await existingOrder.save();
+//       // console.log("New Food order placed successfully!");
+
+//       return { message: "New Food order placed successfully!", status: 200 };
+//     } else {
+//       const newOrder = new foodOrdersModel({
+//         userId,
+//         address,
+//         phone: phoneNumber,
+//         orders, // expected to be an array of ordered food items
+//         date,
+//       });
+//       await newOrder.save();
+//       // console.log("Food order placed successfully!");
+//       return { message: "Food order placed successfully!", status: 201 };
+//     }
+//   } catch (e) {
+//     console.error("Error creating food order:", e);
+//     // throw e;
+//     return {
+//       message: "Something went wrong, please try again!",
+//       status: 500,
+//     };
+//   }
+// }
 
 export async function createUserFoodPlates(userId, plates) {
   try {
