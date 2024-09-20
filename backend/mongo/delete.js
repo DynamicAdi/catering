@@ -1,4 +1,4 @@
-import foodModel, { adminModel, corporateModel } from "./schema.js";
+import foodModel, { adminModel, corporateModel, faqModel, PartnersModel, ServicesModel } from "./schema.js";
 
 export async function deleteFood(foodId) {
   return await foodModel.deleteOne({ _id: foodId });
@@ -16,6 +16,15 @@ export async function deleteData(endpoint, id) {
   }
   if (endpoint === "Popular") {
     return await foodModel.findByIdAndUpdate({ _id: id }, { isPopular: false });
+  }
+  if (endpoint === "Services") {
+    return await ServicesModel.deleteOne({ _id: id });
+  }
+  if (endpoint === "Clients") {
+    return await PartnersModel.deleteOne({ _id: id });
+  }
+  if (endpoint === "Faq") {
+    return await faqModel.deleteOne({ _id: id });
   }
 }
 
@@ -39,4 +48,17 @@ export async function removeUserFoodPlate(userId) {
 
 export const removeCorporate = async (id) => {
   return await corporateModel.deleteOne({ _id: id });
+}
+
+export const removePartners = async (id) => {
+  return await PartnersModel.deleteOne({ _id: id });
+}
+
+
+export const removeServices = async (id) => {
+  return await ServicesModel.deleteOne({ _id: id });
+}
+
+export const removeFaq = async (id) => {
+  return await faqModel.deleteOne({ _id: id });
 }

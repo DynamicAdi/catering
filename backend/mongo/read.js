@@ -1,4 +1,4 @@
-import foodModel, { corporateModel, orderModel } from "./schema.js";
+import foodModel, { corporateModel, faqModel, orderModel, PartnersModel, ServicesModel } from "./schema.js";
 import { adminModel, catogeryModel } from "./schema.js";
 
 export const readFood = async (catogery) => {
@@ -17,6 +17,18 @@ export const readById = async (endpoint, id) => {
   }
   if (endpoint === "Admins") {
     const data = await adminModel.findById(id);
+    return data;
+  }
+  if (endpoint === "Services") {
+    const data = await ServicesModel.findById(id);
+    return data;
+  }
+  if (endpoint === "Clients") {
+    const data = await PartnersModel.findById(id);
+    return data;
+  }
+  if (endpoint === "Faq") {
+    const data = await faqModel.findById(id);
     return data;
   }
 };
@@ -67,5 +79,20 @@ export const readDetailsCorporate = async (id) => {
 }
 export const readAllCorporate = async () => {
   const data = await corporateModel.find();
+  return data;
+}
+
+export const readPartners = async () => {
+  const data = await PartnersModel.find();
+  return data;
+}
+
+export const readServices = async () => {
+  const data = await ServicesModel.find();
+  return data;
+}
+
+export const readFaq = async () => {
+  const data = await faqModel.find();
   return data;
 }

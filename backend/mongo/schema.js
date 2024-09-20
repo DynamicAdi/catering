@@ -43,7 +43,7 @@ const foodSchema = new mongoose.Schema({
   },
   rating: {
     type: Number,
-    required: true,
+    required: false,
   },
   isVeg: {
     type: Boolean,
@@ -84,28 +84,6 @@ const orderItemSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-// const foodOrdersSchema = new mongoose.Schema({
-//   userId: {
-//     type: String,
-//     required: true,
-//   },
-//   address: {
-//     type: String,
-//     required: true,
-//   },
-//   phone: {
-//     type: Number,
-//     required: true,
-//   },
-//   orders: [orderItemSchema],
-//   date: {
-//     type: String,
-//     required: true,
-//   },
-// });
-
-// export const foodOrdersModel = mongoose.model("foodOrders", foodOrdersSchema);
 
 const Orders = new mongoose.Schema({
   name: {
@@ -206,3 +184,35 @@ const Corporate = new mongoose.Schema({
 })
 
 export const corporateModel = mongoose.model("corporate", Corporate);
+
+
+const partnersAndServicesSchema = new mongoose.Schema({
+  image: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  }
+})
+export const PartnersModel = mongoose.model('partners', partnersAndServicesSchema)
+export const ServicesModel = mongoose.model('services', partnersAndServicesSchema)
+
+
+const faqSchema = new mongoose.Schema({
+  question: {
+    type: String,
+    required: true,
+  },
+  answer: {
+    type: String,
+    required: true,
+  },
+  catogery: {
+    type: String,
+    required: true,
+  }
+})
+
+export const faqModel = mongoose.model('faq', faqSchema)

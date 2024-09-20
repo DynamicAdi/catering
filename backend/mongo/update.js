@@ -1,4 +1,4 @@
-import foodModel, { adminModel, corporateModel } from "./schema.js";
+import foodModel, { adminModel, corporateModel, faqModel, PartnersModel, ServicesModel } from "./schema.js";
 
 export const updateFood = (
   id,
@@ -77,3 +77,16 @@ export const updateCorporate = async (
   items) => {
   return corporateModel.findByIdAndUpdate({ _id: id }, { title: title, description: description, image: image, discountedPrice: discountedPrice, actualPrice: actualPrice, isVeg: isVeg, tags: tags, items: items});
 };
+
+
+export const updatePartners = async (id, image, name) => {
+  return PartnersModel.findByIdAndUpdate({ _id: id }, { image: image, name: name});
+}
+
+export const updateServices = async (id, image, name) => {
+  return ServicesModel.findByIdAndUpdate({ _id: id }, { image: image, name: name});
+}
+
+export const updateFaq = async (id, question, answer, catogery) => {
+  return faqModel.findByIdAndUpdate({ _id: id }, { question: question, answer: answer, catogery: catogery});
+}

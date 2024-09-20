@@ -3,7 +3,10 @@ import foodModel, {
   catogeryModel,
   orderModel,
   adminModel,
-  corporateModel
+  corporateModel,
+  PartnersModel,
+  ServicesModel,
+  faqModel
 } from "./schema.js";
 export async function CreateFood(
   name,
@@ -89,59 +92,45 @@ export const createCorporate = async (
   }
 }
 
-// export async function createFoodOrders(
-//   userId,
-//   address,
-//   phoneNumber,
-//   orders,
-//   date
-// ) {
-//   // console.log(userId, address, phoneNumber, orders, date);
-//   try {
-//     const existingOrder = await foodOrdersModel.findOne({ userId });
+export async function createPartners(image, name) {
+  try {
+    const partners = new PartnersModel({
+      image: image,
+      name: name,
+    });
+    await partners.save();
+  }
+  catch (e) {
+    console.log("error" + e);
+  }
+}
 
-//     if (existingOrder) {
-//       orders.forEach((newItem) => {
-//         const existingItem = existingOrder.orders.find(
-//           (item) => item.id === newItem.id
-//         );
+export async function createServices(image, name) {
+  try {
+    const partners = new ServicesModel({
+      image: image,
+      name: name,
+    });
+    await partners.save();
+  }
+  catch (e) {
+    console.log("error" + e);
+  }
+}
 
-//         if (existingItem) {
-//           existingItem.quantity = existingItem.quantity + newItem.quantity;
-//         } else {
-//           existingOrder.orders.push(newItem);
-//         }
-//       });
-//       // existingOrder.orders = [...existingOrder.orders, ...orders];
-//       existingOrder.address = address;
-//       existingOrder.phoneNumber = phoneNumber;
-//       existingOrder.date = date;
-
-//       await existingOrder.save();
-//       // console.log("New Food order placed successfully!");
-
-//       return { message: "New Food order placed successfully!", status: 200 };
-//     } else {
-//       const newOrder = new foodOrdersModel({
-//         userId,
-//         address,
-//         phone: phoneNumber,
-//         orders, // expected to be an array of ordered food items
-//         date,
-//       });
-//       await newOrder.save();
-//       // console.log("Food order placed successfully!");
-//       return { message: "Food order placed successfully!", status: 201 };
-//     }
-//   } catch (e) {
-//     console.error("Error creating food order:", e);
-//     // throw e;
-//     return {
-//       message: "Something went wrong, please try again!",
-//       status: 500,
-//     };
-//   }
-// }
+export async function createFaq(question, answer, catogery) {
+  try {
+    const faq = new faqModel({
+      question: question,
+      answer: answer,
+      catogery: catogery,
+    });
+    await faq.save();
+  }
+  catch (e) {
+    console.log("error" + e);
+  }
+}
 
 export async function createUserFoodPlates(userId, plates) {
   try {

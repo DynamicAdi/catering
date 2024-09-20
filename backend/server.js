@@ -15,6 +15,9 @@ import {
   readCorporate,
   readDetailsCorporate,
   readAllCorporate,
+  readPartners,
+  readServices,
+  readFaq,
 } from "./mongo/read.js";
 import {
   CreateFood,
@@ -22,10 +25,13 @@ import {
   createOrders,
   createAdmins,
   createCorporate,
+  createPartners,
+  createServices,
+  createFaq,
 } from "./mongo/create.js";
 
-import { deleteData, removeCorporate } from "./mongo/delete.js";
-import { updateCorporate, updateFood, updateUser } from "./mongo/update.js";
+import { deleteData, removeCorporate, removeFaq, removePartners, removeServices } from "./mongo/delete.js";
+import { updateCorporate, updateFaq, updateFood, updatePartners, updateServices, updateUser } from "./mongo/update.js";
 import foodModel, { adminModel, orderModel } from "./mongo/schema.js";
 
 dotenv.config();
@@ -212,25 +218,117 @@ app.post("/createFood", async (req, res) => {
   });
 });
 
+app.get('/Clients', async (req, res) => {
+  const response = await readPartners();
+
+      res.status(200).send(response);
+
+})
+
+app.post('/createClient', async (req, res) => {
+    const {name, image} = req.body;
+    await createPartners(image, name);
+    res.send(200)
+})
+
+
+app.put('/postClient', async (req, res) => {
+  const {id, name, image} = req.body;
+  const response = await updatePartners(id, image, name);
+
+    res.sendStatus(200);
+
+})
+
+app.delete('/delClient', async (req, res) => {
+  const {id} = req.body;
+  const response = await removePartners(id);
+
+    res.sendStatus(200);
+
+})
+
+
+
+app.get('/Services', async (req, res) => {
+  const response = await readServices();
+
+      res.send(response);
+
+})
+
+
+app.delete('/delServices', async (req, res) => {
+  const {id} = req.body;
+  const response = await removeServices(id);
+
+    res.sendStatus(200);
+
+})
+
+app.post('/createServices', async (req, res) => {
+    const {name, image} = req.body;
+    await createServices(image, name);
+      res.sendStatus(200)
+})
+
+app.put('/postServices', async (req, res) => {
+  const {id, name, image} = req.body;
+  const response = await updateServices(id, image, name);
+
+    res.sendStatus(200);
+})
+
+
+app.get('/Faq', async (req, res) => {
+  const response = await readFaq();
+
+      res.send(response);
+
+})
+
+
+app.delete('/delFaq', async (req, res) => {
+  const {id} = req.body;
+  const response = await removeFaq(id);
+
+    res.sendStatus(200);
+
+})
+
+app.post('/createFaq', async (req, res) => {
+    const {question, answer, catogery} = req.body;    
+    const response = await createFaq(question, answer, catogery);
+    res.sendStatus(200)
+})
+
+app.put('/updateFaq', async (req, res) => {
+  const {id, answer, question, catogery} = req.body;
+  const response = await updateFaq(id, question, answer, catogery);
+
+    res.sendStatus(200);
+
+})
+
 app.get('/Corporate', async (req, res) => {
   const response = await readAllCorporate();
-  if (response) {
+
       res.send(response);  
-  }
+
 })
 
 app.get('/CorporateList', async (req, res) => {
     const response = await readCorporate();
-    if (response) {
+  
         res.send(response);  
-    }
+  
 })
 app.get('/corporateDetails/id=:id', async (req, res) => {
   const { id } = req.params;
   const response = await readDetailsCorporate(id);
-  if (response) {
+
       res.send(response);  
-  }
+
 })
 
 app.post('/addCorporate', async (req, res) => {
@@ -300,3 +398,4 @@ app.put('/status', async (req, res) => {
 
 
 connection();
+
