@@ -220,15 +220,13 @@ app.post("/createFood", async (req, res) => {
 
 app.get('/Clients', async (req, res) => {
   const response = await readPartners();
-
       res.status(200).send(response);
-
 })
 
 app.post('/createClient', async (req, res) => {
     const {name, image} = req.body;
     await createPartners(image, name);
-    res.send(200)
+    res.sendStatus(200)
 })
 
 
