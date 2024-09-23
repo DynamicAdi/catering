@@ -41,10 +41,6 @@ const foodSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  rating: {
-    type: Number,
-    required: false,
-  },
   isVeg: {
     type: Boolean,
     required: true,
