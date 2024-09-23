@@ -19,7 +19,7 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: false,
     default: "admin",
-  }
+  },
 });
 
 export const adminModel = new mongoose.model("admins", adminSchema);
@@ -57,33 +57,16 @@ const foodSchema = new mongoose.Schema({
     type: Boolean,
     required: false,
     default: false,
-  }
+  },
 });
 
 const foodModel = new mongoose.model("foods", foodSchema);
 export default foodModel;
 
-const orderItemSchema = new mongoose.Schema(
-  {
-    id: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: false,
-    },
-    image: {
-      type: String,
-      required: false,
-    },
-  },
-  { timestamps: true }
-);
+const statusHistorySchema = new mongoose.Schema({
+  status: String, // New status
+  changedAt: Date, // When the status was changed
+});
 
 const Orders = new mongoose.Schema({
   name: {
@@ -129,7 +112,8 @@ const Orders = new mongoose.Schema({
   status: {
     type: String,
     required: false,
-  }
+  },
+  statusHistory: { type: [statusHistorySchema], required: false },
 });
 
 export const orderModel = mongoose.model("orders", Orders);
@@ -146,7 +130,6 @@ const catogerySchema = new mongoose.Schema({
 });
 
 export const catogeryModel = mongoose.model("catogery", catogerySchema);
-
 
 const Corporate = new mongoose.Schema({
   title: {
@@ -180,11 +163,10 @@ const Corporate = new mongoose.Schema({
   items: {
     type: [],
     required: true,
-  }
-})
+  },
+});
 
 export const corporateModel = mongoose.model("corporate", Corporate);
-
 
 const partnersAndServicesSchema = new mongoose.Schema({
   image: {
@@ -194,11 +176,16 @@ const partnersAndServicesSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-  }
-})
-export const PartnersModel = mongoose.model('partners', partnersAndServicesSchema)
-export const ServicesModel = mongoose.model('services', partnersAndServicesSchema)
-
+  },
+});
+export const PartnersModel = mongoose.model(
+  "partners",
+  partnersAndServicesSchema
+);
+export const ServicesModel = mongoose.model(
+  "services",
+  partnersAndServicesSchema
+);
 
 const faqSchema = new mongoose.Schema({
   question: {
@@ -212,7 +199,7 @@ const faqSchema = new mongoose.Schema({
   catogery: {
     type: String,
     required: true,
-  }
-})
+  },
+});
 
-export const faqModel = mongoose.model('faq', faqSchema)
+export const faqModel = mongoose.model("faq", faqSchema);

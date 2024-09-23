@@ -388,9 +388,28 @@ app.get("/Orders", async (req, res) => {
   res.send(orders);
 });
 
+
+app.get('/getStatus', async (req, res) => {
+  const response = await orderModel.find().select({ status: 1, _id: 1 })
+  res.send(response)
+})
+
+
+app.get('/statusHistory/:id', async (req, res) => {
+  const id = req.params.id
+  const response = await orderModel.find({ _id: id}).select({ statusHistory: 1, _id: 0 })
+  res.status(200).send(response)
+})
+
+
 app.put('/status', async (req, res) => {
   const { id, status } = req.body;
-  await orderModel.updateOne({ _id: id }, { $set: { status: status } });
+  await orderModel.updateOne({ _id: id }, { $set: { status: status }, $push: {
+    statusHistory: {
+      status: status,
+      changedAt: new Date(),
+    }
+  } });
   res.send({ message: "Updated successfully" });
 })
 
