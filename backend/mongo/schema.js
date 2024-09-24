@@ -62,6 +62,7 @@ export default foodModel;
 const statusHistorySchema = new mongoose.Schema({
   status: String, // New status
   changedAt: Date, // When the status was changed
+  default: "Ordered"
 });
 
 const Orders = new mongoose.Schema({
@@ -108,6 +109,7 @@ const Orders = new mongoose.Schema({
   status: {
     type: String,
     required: false,
+    default: "ordered"
   },
   statusHistory: { type: [statusHistorySchema], required: false },
 });
