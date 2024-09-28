@@ -1,4 +1,4 @@
-import foodModel, { adminModel, corporateModel, faqModel, PartnersModel, ServicesModel } from "./schema.js";
+import foodModel, { adminModel, catogeryModel, corporateModel, faqModel, PackagesModel, PartnersModel, ServicesModel } from "./schema.js";
 
 export async function deleteFood(foodId) {
   return await foodModel.deleteOne({ _id: foodId });
@@ -25,6 +25,12 @@ export async function deleteData(endpoint, id) {
   }
   if (endpoint === "Faq") {
     return await faqModel.deleteOne({ _id: id });
+  }
+  if (endpoint === "Category") {
+    return await catogeryModel.deleteOne({ _id: id });
+  }
+  if (endpoint === "Packages") {
+    return await PackagesModel.deleteOne({ _id: id });
   }
 }
 

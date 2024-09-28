@@ -62,7 +62,6 @@ export default foodModel;
 const statusHistorySchema = new mongoose.Schema({
   status: String, // New status
   changedAt: Date, // When the status was changed
-  default: "Ordered"
 });
 
 const Orders = new mongoose.Schema({
@@ -111,7 +110,7 @@ const Orders = new mongoose.Schema({
     required: false,
     default: "ordered"
   },
-  statusHistory: { type: [statusHistorySchema], required: false },
+  statusHistory: { type: [statusHistorySchema], required: false, default: "ordered" },
 });
 
 export const orderModel = mongoose.model("orders", Orders);
@@ -126,8 +125,8 @@ const catogerySchema = new mongoose.Schema({
     required: true,
   },
 });
-
 export const catogeryModel = mongoose.model("catogery", catogerySchema);
+
 
 const Corporate = new mongoose.Schema({
   title: {
@@ -138,10 +137,6 @@ const Corporate = new mongoose.Schema({
     type: String,
     required: true,
   },
-  image: {
-    type: [String],
-    required: true,
-  },
   actualPrice: {
     type: Number,
     required: true,
@@ -150,8 +145,8 @@ const Corporate = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  isVeg: {
-    type: Boolean,
+  image: {
+    type: [String],
     required: false,
   },
   tags: {
@@ -162,9 +157,38 @@ const Corporate = new mongoose.Schema({
     type: [],
     required: true,
   },
+  catogery: {
+    type: String,
+    required: true,
+  }
 });
 
 export const corporateModel = mongoose.model("corporate", Corporate);
+
+const PackagesSchema = mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+  },
+  catogery: {
+    type: String,
+    required: true,
+  },
+  items: {
+    type: [],
+    required: true,
+  }
+})
+
+export const PackagesModel = mongoose.model("packages", PackagesSchema);
 
 const partnersAndServicesSchema = new mongoose.Schema({
   image: {

@@ -1,4 +1,4 @@
-import foodModel, { adminModel, corporateModel, faqModel, PartnersModel, ServicesModel } from "./schema.js";
+import foodModel, { adminModel, catogeryModel, corporateModel, faqModel, PackagesModel, PartnersModel, ServicesModel } from "./schema.js";
 
 export const updateFood = (
   id,
@@ -66,18 +66,28 @@ export async function updateUserFoodPlate(userId, plateId, action) {
 
 
 export const updateCorporate = async (
+  title,
+  description,
+  image,
+  actualPrice,
+  discountedPrice,
+  catogery,
+  tags,
+  items,
+) => {
+  return corporateModel.findByIdAndUpdate({ _id: id }, { title: title, description: description, image: image, discountedPrice: discountedPrice, actualPrice: actualPrice, catogery: catogery, tags: tags, items: items});
+};
+
+export const updatePackage = async (
   id,
   title,
   description,
   image,
-  discountedPrice,
-  actualPrice,
-  isVeg,
-  tags,
-  items) => {
-  return corporateModel.findByIdAndUpdate({ _id: id }, { title: title, description: description, image: image, discountedPrice: discountedPrice, actualPrice: actualPrice, isVeg: isVeg, tags: tags, items: items});
-};
-
+  catogery,
+  items
+) => {
+  return PackagesModel.findByIdAndUpdate({_id: id}, {title: title, description: description, image: image, catogery: catogery, items: items})
+}
 
 export const updatePartners = async (id, image, name) => {
   return PartnersModel.findByIdAndUpdate({ _id: id }, { image: image, name: name});
@@ -89,4 +99,8 @@ export const updateServices = async (id, image, name) => {
 
 export const updateFaq = async (id, question, answer, catogery) => {
   return faqModel.findByIdAndUpdate({ _id: id }, { question: question, answer: answer, catogery: catogery});
+}
+
+export const UpdateCategory = async (id, name, image) => {
+  return catogeryModel.findByIdAndUpdate({_id: id}, {name: name}, {image: image});
 }

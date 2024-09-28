@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import cors from "cors";
-import "./passport.js";
+
 import {
   readAdmins,
   readById,
@@ -18,6 +18,7 @@ import {
   readPartners,
   readServices,
   readFaq,
+  getPackages,
 } from "./mongo/read.js";
 import {
   CreateFood,
@@ -28,11 +29,12 @@ import {
   createPartners,
   createServices,
   createFaq,
+  createPackages,
 } from "./mongo/create.js";
 
 import { deleteData, removeCorporate, removeFaq, removePartners, removeServices } from "./mongo/delete.js";
-import { updateCorporate, updateFaq, updateFood, updatePartners, updateServices, updateUser } from "./mongo/update.js";
-import foodModel, { adminModel, orderModel } from "./mongo/schema.js";
+import { UpdateCategory, updateCorporate, updateFaq, updateFood, updatePackage, updatePartners, updateServices, updateUser } from "./mongo/update.js";
+import foodModel, { adminModel, corporateModel, orderModel } from "./mongo/schema.js";
 
 dotenv.config();
 
@@ -137,18 +139,26 @@ app.post('/admins/login', async function(req, res) {
 
 });
 
-app.get("/catogery", async (req, res) => {
+app.get("/Category", async (req, res) => {
   const response = await readCatogery();
   return res.send(response);
 });
 
-app.post("/catogery/create", async (req, res) => {
+app.post("/category/create", async (req, res) => {
   const data = req.body;
   const image = data.image;
   const lowerCase = data.name.toLowerCase();
   const response = await Catogery(lowerCase, image);
   res.send(response);
 });
+
+app.put("/category/update", async (req, res) => {
+  const { id, name, image } = req.body;
+  const lowerCase = name.toLowerCase();
+  await UpdateCategory(id, lowerCase, image);
+  res.sendStatus(200);
+});
+
 
 app.put("/update", async (req, res) => {
   const { id, name, description, price, image, rating, isVeg, catogery, isPopular } = req.body;
@@ -178,6 +188,8 @@ app.get("/Foods", async (req, res) => {
   const food = await readAllFoods();
   res.send(food);
 });
+
+
 
 app.get("/popular", async (req, res) => {
   const food = await foodModel.find({ isPopular: true });
@@ -310,35 +322,56 @@ app.put('/updateFaq', async (req, res) => {
 
 app.get('/Corporate', async (req, res) => {
   const response = await readAllCorporate();
-
       res.send(response);  
-
 })
 
 app.get('/CorporateList', async (req, res) => {
     const response = await readCorporate();
-  
-        res.send(response);  
-  
+    res.send(response); 
 })
 app.get('/corporateDetails/id=:id', async (req, res) => {
   const { id } = req.params;
   const response = await readDetailsCorporate(id);
-
       res.send(response);  
-
 })
+
+app.get('/CorporateItems/id=:id', async (req, res) => {
+  const {id} = req.params;
+  const fullData = await corporateModel.findById({_id: id}).select({items: 1, _id: 0});
+  const getFood = await foodModel.find({name: fullData.items})
+  res.status(200).send(getFood);
+})
+
+app.get('/Packages', async (req, res) => {
+  const response = await getPackages();
+  res.status(200).send(response);
+})
+
+app.post('/createPackages', async (req, res) => {
+  const {name, description, image, catogery, items} = req.body;
+  await createPackages(name, description, image, catogery, items);
+  res.sendStatus(200);
+})
+
+app.put('/updatePackages', async (req, res) => {
+  const {id, name, description, image, catogery, items} = req.body;
+  await updatePackage(id, name, description, image, catogery, items);
+  res.sendStatus(200);
+})
+
+
 
 app.post('/addCorporate', async (req, res) => {
-  const { name, description, image, actualPrice, discountedPrice, isVeg, tags, items } = req.body;
-  await createCorporate(name, description, image, actualPrice, discountedPrice, isVeg, tags, items);
-  res.send({ message: "Data added successfully" });
+  const { name, description, image, actualPrice, discountedPrice, catogery, tags, items } = req.body;
+  console.log(name, description, image, actualPrice, discountedPrice, catogery, tags, items);
+  await createCorporate(name, description, image, actualPrice, discountedPrice, catogery, tags, items);
+  res.status(200).send({ message: "Data added successfully" });
 })
 
-app.post('/updateCorporate', async (req, res) => {
-  const {id, name, description, image, actualPrice, discountedPrice, isVeg, tags, items } = req.body;
-  const resp = await updateCorporate(id, name, description, image, actualPrice, discountedPrice, isVeg, tags, items);
-  res.send({ message: "Data Updated successfully", data: resp });
+app.put('/updateCorporate', async (req, res) => {
+  const {id, name, description, image, actualPrice, discountedPrice, catogery, tags, items } = req.body;
+  await updateCorporate(id, name, description, image, actualPrice, discountedPrice, catogery, tags, items);
+  res.send(200).send({ message: "Data Updated successfully" });
 })
 
 app.post("/deleteCorporate", async (req, res) => {
@@ -415,4 +448,3 @@ app.put('/status', async (req, res) => {
 
 
 connection();
-

@@ -1,4 +1,4 @@
-import foodModel, { corporateModel, faqModel, orderModel, PartnersModel, ServicesModel } from "./schema.js";
+import foodModel, { corporateModel, faqModel, orderModel, PackagesModel, PartnersModel, ServicesModel } from "./schema.js";
 import { adminModel, catogeryModel } from "./schema.js";
 
 export const readFood = async (catogery) => {
@@ -67,7 +67,7 @@ export const readCorporate = async () => {
     image: { $slice: 1 }, // Get only the first element of the image array
     actualPrice: 1,
     discountedPrice: 1,
-    isVeg: 1,
+    catogery: 1,
     _id: 1 // Exclude _id
   });
 
@@ -94,5 +94,10 @@ export const readServices = async () => {
 
 export const readFaq = async () => {
   const data = await faqModel.find();
+  return data;
+}
+
+export const getPackages = async () => {
+  const data = await PackagesModel.find();
   return data;
 }
