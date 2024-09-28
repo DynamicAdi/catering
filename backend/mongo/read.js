@@ -1,4 +1,4 @@
-import foodModel, { corporateModel, faqModel, orderModel, PackagesModel, PartnersModel, ServicesModel } from "./schema.js";
+import foodModel, { corporateModel, faqModel, OrderCorporateModel, orderModel, PackageOrderModel, PackagesModel, PartnersModel, ServicesModel } from "./schema.js";
 import { adminModel, catogeryModel } from "./schema.js";
 
 export const readFood = async (catogery) => {
@@ -58,7 +58,15 @@ export const readCatogery = async () => {
   return data;
 }
 
+export const readCorporateOrders = async () => {
+  const data = await OrderCorporateModel.find()
+  return data;
+}
 
+export const readPackages = async () => {
+  const data = await PackageOrderModel.find()
+  return data;
+}
 export const readCorporate = async () => {
   const data = await corporateModel.find({})
   .select({

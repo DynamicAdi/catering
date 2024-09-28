@@ -7,7 +7,9 @@ import foodModel, {
   PartnersModel,
   ServicesModel,
   faqModel,
-  PackagesModel
+  PackagesModel,
+  OrderCorporateModel,
+  PackageOrderModel
 } from "./schema.js";
 export async function CreateFood(
   name,
@@ -65,6 +67,55 @@ export const createOrders = async (
   }
 };
 
+export const orderPackages = async function(
+  item,
+  name,
+  email,
+  phone,
+  address,
+  date,
+  customize
+) {
+  try {
+    const result = new PackageOrderModel({
+      OrderedItem: item,
+      name: name,
+      email: email,
+      phone: phone,
+      address: address,
+      date: date,
+      customize: customize,
+    })
+    await result.save();
+  }
+  catch (e) {
+    console.log("error" + e);
+  }
+}
+
+export const orderCorporate = async function(
+  item,
+  name,
+  email,
+  phone,
+  address,
+  date,
+) {
+  try {
+    const result = new OrderCorporateModel({
+      OrderedItem: item,
+      name: name,
+      email: email,
+      phone: phone,
+      address: address,
+      date: date,
+    })
+    await result.save();
+  }
+  catch (e) {
+    console.log("error" + e);
+  }
+}
 
 export const createPackages = async function(
   title,
@@ -72,6 +123,7 @@ export const createPackages = async function(
   image,
   catogery,
   items,
+  tags
 ) {
   try {
     const packages = new PackagesModel({
@@ -80,6 +132,7 @@ export const createPackages = async function(
       image: image,
       catogery: catogery,
       items: items,
+      tags: tags,
     })
     await packages.save();
   } 

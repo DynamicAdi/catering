@@ -66,6 +66,7 @@ export async function updateUserFoodPlate(userId, plateId, action) {
 
 
 export const updateCorporate = async (
+  id,
   title,
   description,
   image,
@@ -84,9 +85,10 @@ export const updatePackage = async (
   description,
   image,
   catogery,
-  items
+  items,
+  tags
 ) => {
-  return PackagesModel.findByIdAndUpdate({_id: id}, {title: title, description: description, image: image, catogery: catogery, items: items})
+  return PackagesModel.findByIdAndUpdate({_id: id}, {title: title, description: description, image: image, catogery: catogery, items: items, tags: tags})
 }
 
 export const updatePartners = async (id, image, name) => {

@@ -110,7 +110,7 @@ const Orders = new mongoose.Schema({
     required: false,
     default: "ordered"
   },
-  statusHistory: { type: [statusHistorySchema], required: false, default: "ordered" },
+  statusHistory: { type: [statusHistorySchema], required: false },
 });
 
 export const orderModel = mongoose.model("orders", Orders);
@@ -165,6 +165,81 @@ const Corporate = new mongoose.Schema({
 
 export const corporateModel = mongoose.model("corporate", Corporate);
 
+const OrderCorporateSchema = mongoose.Schema({
+  OrderedItem: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: Number,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    required: false,
+    default: "ordered"
+  },
+  statusHistory: { type: [statusHistorySchema], required: false },
+})
+
+export const OrderCorporateModel = mongoose.model("orderCorporate", OrderCorporateSchema);
+
+const PackageOrderSchema = mongoose.Schema({
+  OrderedItem: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: Number,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    required: false,
+    default: "ordered"
+  },
+  customize: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  statusHistory: { type: [statusHistorySchema], required: false },
+})
+
+export const PackageOrderModel = mongoose.model('PackagesOrders', PackageOrderSchema)
+
 const PackagesSchema = mongoose.Schema({
   title: {
     type: String,
@@ -175,7 +250,7 @@ const PackagesSchema = mongoose.Schema({
     required: true,
   },
   image: {
-    type: String,
+    type: [String],
     required: true,
   },
   catogery: {
@@ -185,6 +260,10 @@ const PackagesSchema = mongoose.Schema({
   items: {
     type: [],
     required: true,
+  },
+  tags: {
+    type: [String],
+    required: false,
   }
 })
 

@@ -19,6 +19,8 @@ import {
   readServices,
   readFaq,
   getPackages,
+  readCorporateOrders,
+  readPackages,
 } from "./mongo/read.js";
 import {
   CreateFood,
@@ -30,11 +32,13 @@ import {
   createServices,
   createFaq,
   createPackages,
+  orderCorporate,
+  orderPackages,
 } from "./mongo/create.js";
 
 import { deleteData, removeCorporate, removeFaq, removePartners, removeServices } from "./mongo/delete.js";
 import { UpdateCategory, updateCorporate, updateFaq, updateFood, updatePackage, updatePartners, updateServices, updateUser } from "./mongo/update.js";
-import foodModel, { adminModel, corporateModel, orderModel } from "./mongo/schema.js";
+import foodModel, { adminModel, corporateModel, OrderCorporateModel, orderModel, PackageOrderModel, PackagesModel } from "./mongo/schema.js";
 
 dotenv.config();
 
@@ -329,6 +333,8 @@ app.get('/CorporateList', async (req, res) => {
     const response = await readCorporate();
     res.send(response); 
 })
+
+
 app.get('/corporateDetails/id=:id', async (req, res) => {
   const { id } = req.params;
   const response = await readDetailsCorporate(id);
@@ -342,20 +348,52 @@ app.get('/CorporateItems/id=:id', async (req, res) => {
   res.status(200).send(getFood);
 })
 
+app.get('/packageItems/id=:id', async (req, res) => {
+  const {id} = req.params;
+  const fullData = await PackagesModel.findById({_id: id}).select({items: 1, _id: 0});
+  const getFood = await foodModel.find({name: fullData.items})
+  res.status(200).send(getFood);
+})
+app.post('/orderPackages', async (req, res) => {
+  const {itemName, name, email, phone, address, date, customize } = req.body;
+  await orderPackages(itemName, name, email, phone, address, date, customize);
+  res.status(200).send({ message: "Order placed successfully" });
+})
+app.get('/Packages%20orders', async function (req, res) {
+  const response = await readPackages();
+  res.status(200).send(response);
+})
+
+
+app.post('/orderCorporate', async (req, res) => {
+  const {itemName, name, email, phone, address, date } = req.body;
+  await orderCorporate(itemName, name, email, phone, address, date);
+  res.status(200).send({ message: "Order placed successfully" });
+})
+
+app.get('/Corporate%20orders', async (req, res) => {
+  const response = await readCorporateOrders();
+  res.status(200).send(response);
+})
 app.get('/Packages', async (req, res) => {
   const response = await getPackages();
   res.status(200).send(response);
 })
 
+app.get('/packagesDetails/id=:id', async (req, res) => {
+  const { id } = req.params;
+  const response = await PackagesModel.find({_id: id});
+  res.status(200).send(response);
+})
 app.post('/createPackages', async (req, res) => {
-  const {name, description, image, catogery, items} = req.body;
-  await createPackages(name, description, image, catogery, items);
+  const {name, description, image, catogery, items, tags} = req.body;
+  await createPackages(name, description, image, catogery, items, tags);
   res.sendStatus(200);
 })
 
 app.put('/updatePackages', async (req, res) => {
-  const {id, name, description, image, catogery, items} = req.body;
-  await updatePackage(id, name, description, image, catogery, items);
+  const {id, name, description, image, catogery, items, tags} = req.body;
+  await updatePackage(id, name, description, image, catogery, items, tags);
   res.sendStatus(200);
 })
 
@@ -371,7 +409,7 @@ app.post('/addCorporate', async (req, res) => {
 app.put('/updateCorporate', async (req, res) => {
   const {id, name, description, image, actualPrice, discountedPrice, catogery, tags, items } = req.body;
   await updateCorporate(id, name, description, image, actualPrice, discountedPrice, catogery, tags, items);
-  res.send(200).send({ message: "Data Updated successfully" });
+  res.status(200).send({ message: "Data Updated successfully" });
 })
 
 app.post("/deleteCorporate", async (req, res) => {
@@ -427,17 +465,57 @@ app.get('/getStatus', async (req, res) => {
   res.send(response)
 })
 
+app.get('/corporateStatus', async (req, res) => {
+  const response = await OrderCorporateModel.find().select({ status: 1, _id: 1 })
+  res.send(response)
+})
 
-app.get('/statusHistory/:id', async (req, res) => {
+app.get('/packagesStatus', async (req, res) => {
+  const response = await PackageOrderModel.find().select({ status: 1, _id: 1 })
+  res.send(response)
+})
+
+
+
+app.get('/statusHistory/:tab/:id', async (req, res) => {
   const id = req.params.id
-  const response = await orderModel.find({ _id: id}).select({ statusHistory: 1, _id: 0 })
-  res.status(200).send(response)
+  const tab = req.params.tab;
+  if (tab==="Orders") {
+    const response = await orderModel.find({ _id: id}).select({ statusHistory: 1, _id: 0 })
+    res.status(200).send(response)
+  }
+  if (tab==="Corporate orders") {
+    const response = await OrderCorporateModel.find({ _id: id}).select({ statusHistory: 1, _id: 0 })
+    res.status(200).send(response)
+  }
 })
 
 
 app.put('/status', async (req, res) => {
   const { id, status } = req.body;
   await orderModel.updateOne({ _id: id }, { $set: { status: status }, $push: {
+    statusHistory: {
+      status: status,
+      changedAt: new Date(),
+    }
+  } });
+  res.send({ message: "Updated successfully" });
+})
+
+app.put('/changeStatus', async (req, res) => {
+  const { id, status } = req.body;
+  await OrderCorporateModel.updateOne({ _id: id }, { $set: { status: status }, $push: {
+    statusHistory: {
+      status: status,
+      changedAt: new Date(),
+    }
+  } });
+  res.send({ message: "Updated successfully" });
+})
+
+app.put('/changepackagesStatus', async (req, res) => {
+  const { id, status } = req.body;
+  await PackageOrderModel.updateOne({ _id: id }, { $set: { status: status }, $push: {
     statusHistory: {
       status: status,
       changedAt: new Date(),
