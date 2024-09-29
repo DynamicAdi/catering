@@ -4,6 +4,10 @@ import dotenv from "dotenv";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import cors from "cors";
+import nodemailer from "nodemailer";
+import path from "path";
+import fs from "fs";
+import multer from "multer";
 
 import {
   readAdmins,
@@ -43,6 +47,7 @@ import foodModel, { adminModel, corporateModel, OrderCorporateModel, orderModel,
 dotenv.config();
 
 const app = express();
+const upload = multer({ dest: "uploads/" });
 
 const port = process.env.PORT || 7000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -459,7 +464,12 @@ app.get("/Orders", async (req, res) => {
   res.send(orders);
 });
 
-
+app.get("/invoice/:id", async (req, res) => {
+  const { id } = req.params;
+  const order = await orderModel.find({_id: id});
+  res.status(200).send(order);
+  
+})
 app.get('/getStatus', async (req, res) => {
   const response = await orderModel.find().select({ status: 1, _id: 1 })
   res.send(response)
@@ -523,6 +533,50 @@ app.put('/changepackagesStatus', async (req, res) => {
   } });
   res.send({ message: "Updated successfully" });
 })
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  secure: true,
+  port: 465,
+  auth: {
+    user: "adarshpanditdev@gmail.com",
+    pass: "xsnyetqwdjegfvbw",
+  },
+});
+
+// Endpoint to handle sending email with PDF attachment
+app.post("/send-invoice", upload.single("pdf"), (req, res) => {
+  const { customerEmail } = req.body;
+  const pdfPath = req.file.path; // Get the file path from multer
+
+  // Define mail options
+  const mailOptions = {
+    from: "adarshpanditdev@gmail.com", // Sender email
+    to: customerEmail, // Customer's email
+    subject: "Your Invoice",
+    text: "Here is your invoice attached.",
+    attachments: [
+      {
+        filename: "invoice.pdf", // You can name the PDF here
+        path: pdfPath, // Attach the uploaded PDF
+      },
+    ],
+  };
+
+  // Send the email with Nodemailer
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return res.status(500).send({ success: false, message: error.toString() });
+    }
+
+    // Delete the uploaded PDF after sending the email
+    fs.unlink(pdfPath, (err) => {
+      if (err) console.error("Error deleting file:", err);
+    });
+
+    res.status(200).send({ success: true, message: "Email sent: " + info.response });
+  });
+});
 
 
 connection();
