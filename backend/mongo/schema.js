@@ -105,6 +105,10 @@ const Orders = new mongoose.Schema({
     type: String,
     required: true,
   },
+  mynote: {
+    type: [String],
+    required: false,
+  },
   status: {
     type: String,
     required: false,

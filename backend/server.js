@@ -429,6 +429,59 @@ app.post("/plate", async (req, res) => {
   res.send(response);
 });
 
+app.get('/notes/:id', async (req, res) => {
+  const id = req.params.id;
+  const response = await orderModel.find({ _id: id }).select({ mynote: 1, _id: 0 });
+  res.status(200).send(response);
+})
+app.post('/notes/add', async (req, res) => {
+  const {id, mynote} = req.body;
+  const response = await orderModel.updateOne({ _id: id }, { $push: {
+    mynote: mynote
+  }});
+  res.status(200).send(response);
+})
+
+app.put('/notes/update', async (req, res) => {
+  const { id, oldNote, newNote } = req.body; // Get document ID and notes from request
+
+  try {
+    const document = await orderModel.findById(id);
+
+    if (!document) {
+      return res.status(404).send({ message: 'Document not found' });
+    }
+    const noteIndex = document.mynote.indexOf(oldNote);
+
+    if (noteIndex === -1) {
+      return res.status(404).send({ message: 'Note not found in array' });
+    }
+    document.mynote[noteIndex] = newNote;
+    await document.save();
+
+    res.status(200).send({ message: 'Note updated successfully', document });
+  } catch (error) {
+    res.status(500).send({ message: 'Error updating note', error });
+  }
+});
+
+app.delete('/notes/delete/:id/:note', async (req, res) => {
+  const { id, note } = req.params; // Get document ID and note to delete
+  try {
+    console.log(id, note);
+    await orderModel.updateOne(
+      { _id: id },
+      { $pull: { mynote: note } }
+    );
+    res.status(200).send({ message: 'Note deleted successfully' });
+  } 
+  catch (error) {
+    res.status(500).send({ message: 'Error deleting note', error });
+  }
+});
+
+
+
 app.post("/addOrder", async (req, res) => {
   const {
     name,
