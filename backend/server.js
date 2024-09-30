@@ -627,6 +627,8 @@ app.post("/send-invoice", upload.single("pdf"), (req, res) => {
     });
 
     res.status(200).send({ success: true, message: "Email sent: " + info.response });
+    console.log('sent');
+    
   });
 });
 
