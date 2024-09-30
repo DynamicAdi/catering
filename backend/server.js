@@ -5,7 +5,6 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import cors from "cors";
 import nodemailer from "nodemailer";
-import path from "path";
 import fs from "fs";
 import multer from "multer";
 
