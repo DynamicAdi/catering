@@ -25,6 +25,7 @@ import {
   readCorporateOrders,
   readPackages,
 } from "./mongo/read.js";
+
 import {
   CreateFood,
   Catogery,
@@ -113,6 +114,22 @@ app.post('/admins/new', async function(req, res) {
   }
 })
 
+app.post('/admins/token', async function(req, res) {
+  const { email, password, token } = req.body;
+  const getAdmin = await adminModel.find({email: email, password: password})
+  if (getAdmin.length === 0) {
+    return res.status(200).json({ message: "Not found", success: false });
+  }
+  const id = req.session.userId = getAdmin[0]._id;
+  const tokenPush = await adminModel.updateOne({_id: id}, {$push: {
+    firebaseToken: token
+  }})
+  if (!tokenPush) {
+    return res.status(500).json({ message: 'Failed to save token', success: false });
+  }
+  res.status(200).send({ message: 'Success', success: true})
+})
+
 
 app.get('/admins/dashboard', async function(req, res) {
   if (!req.session.userId) {
@@ -129,7 +146,6 @@ app.get('/admins/dashboard', async function(req, res) {
 
 // Error handling middleware (optional)
 
-
 app.post('/admins/login', async function(req, res) {
   const { email, password } = req.body;
   const cred = await adminModel.find({email: email, password: password });
@@ -144,7 +160,6 @@ app.post('/admins/login', async function(req, res) {
     message: "OK",
     success: true
   });
-
 });
 
 app.get("/Category", async (req, res) => {
@@ -217,14 +232,14 @@ app.post("/search", async (req, res) => {
 });
 app.post("/delete", async (req, res) => {
   const { endpoint, id } = req.body;
-  const response = await deleteData(endpoint, id);
+  await deleteData(endpoint, id);
   res.send({
     message: "Data deleted successfully",
   });
 });
 app.put("/users/update", async (req, res) => {
-  const { id, name, email, password, role } = req.body;
-  const response = await updateUser(id, name, email, password, role);
+  const { id, name, email, password } = req.body;
+  const response = await updateUser(id, name, email, password);
   res.send({
     message: { response },
   });
@@ -446,7 +461,6 @@ app.put('/notes/update', async (req, res) => {
 
   try {
     const document = await orderModel.findById(id);
-
     if (!document) {
       return res.status(404).send({ message: 'Document not found' });
     }
@@ -465,9 +479,8 @@ app.put('/notes/update', async (req, res) => {
 });
 
 app.delete('/notes/delete/:id/:note', async (req, res) => {
-  const { id, note } = req.params; // Get document ID and note to delete
+  const { id, note } = req.params;
   try {
-    console.log(id, note);
     await orderModel.updateOne(
       { _id: id },
       { $pull: { mynote: note } }
@@ -494,8 +507,7 @@ app.post("/addOrder", async (req, res) => {
     foodPreference,
     items,
   } = req.body;
-  // console.log(req.body);
-
+  
   await createOrders(
     name,
     email,

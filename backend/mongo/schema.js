@@ -20,6 +20,10 @@ const adminSchema = new mongoose.Schema({
     required: false,
     default: "admin",
   },
+  firebaseToken: {
+    type: [String],
+    required: false,
+  }
 });
 
 export const adminModel = new mongoose.model("admins", adminSchema);
