@@ -644,5 +644,22 @@ app.post("/send-invoice", upload.single("pdf"), (req, res) => {
   });
 });
 
+app.post('/contact', async (req, res) => {
+  const { name, email, subject, message } = req.body;
+
+  const options = {
+    from: "adarshpanditdev@gmail.com",
+    to: "panadarsh69@gmail.com",
+    subject: subject,
+    text: `A new queries is arrived from Guru Catering web.!\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
+  }
+  transporter.sendMail(options, (err, info) => {
+    if (err) {
+      return res.status(500).send({ success: false, message: err.toString() });
+    }
+    res.status(200).send({ success: true, message: "Email sent: " + info.response });
+  })
+})
+
 
 connection();
