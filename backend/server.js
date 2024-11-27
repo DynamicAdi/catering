@@ -75,7 +75,7 @@ app.use(
 );
 app.use(express.json());
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", ["https://guruscaterers.com", "http://localhost:3000"]);
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
@@ -100,9 +100,6 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
-  res.redirect(URL);
-});
 
 app.post('/admins/new', async function(req, res) {
   const { email, password, name } = req.body;
@@ -621,8 +618,8 @@ app.post("/send-invoice", upload.single("pdf"), (req, res) => {
     text: "Here is your invoice attached.",
     attachments: [
       {
-        filename: "invoice.pdf", // You can name the PDF here
-        path: pdfPath, // Attach the uploaded PDF
+        filename: "invoice.pdf",
+        path: pdfPath,
       },
     ],
   };
@@ -652,6 +649,23 @@ app.post('/contact', async (req, res) => {
     to: "panadarsh69@gmail.com",
     subject: subject,
     text: `A new queries is arrived from Guru Catering web.!\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
+  }
+  transporter.sendMail(options, (err, info) => {
+    if (err) {
+      return res.status(500).send({ success: false, message: err.toString() });
+    }
+    res.status(200).send({ success: true, message: "Email sent: " + info.response });
+  })
+})
+
+app.post('/contactCorporate', async (req, res) => {
+  const { name, email, subject, message } = req.body;
+
+  const options = {
+    from: "adarshpanditdev@gmail.com",
+    to: email,
+    subject: subject,
+    text: message,
   }
   transporter.sendMail(options, (err, info) => {
     if (err) {
