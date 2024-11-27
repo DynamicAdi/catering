@@ -75,7 +75,7 @@ app.use(
 );
 app.use(express.json());
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", ["https://guruscaterers.com", "http://localhost:3000"]);
+  res.header("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
