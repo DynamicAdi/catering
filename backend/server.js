@@ -600,8 +600,8 @@ const transporter = nodemailer.createTransport({
   secure: true,
   port: 465,
   auth: {
-    user: "adarshpanditdev@gmail.com",
-    pass: "xsnyetqwdjegfvbw",
+    user: "guruscaterershyd@gmail.com",
+    pass: "kozjakqnfsejpvja",
   },
 });
 
@@ -612,7 +612,7 @@ app.post("/send-invoice", upload.single("pdf"), (req, res) => {
 
   // Define mail options
   const mailOptions = {
-    from: "adarshpanditdev@gmail.com", // Sender email
+    from: "guruscaterershyd@gmail.com", // Sender email
     to: customerEmail, // Customer's email
     subject: "Your Invoice",
     text: "Here is your invoice attached.",
@@ -645,8 +645,8 @@ app.post('/contact', async (req, res) => {
   const { name, email, subject, message } = req.body;
 
   const options = {
-    from: "adarshpanditdev@gmail.com",
-    to: "panadarsh69@gmail.com",
+    from: "guruscaterershyd@gmail.com",
+    to: "guruscaterershyd@gmail.com",
     subject: subject,
     text: `A new queries is arrived from Guru Catering web.!\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
   }
@@ -659,20 +659,50 @@ app.post('/contact', async (req, res) => {
 })
 
 app.post('/contactCorporate', async (req, res) => {
-  const { name, email, subject, message } = req.body;
+  const { name, email, subject, message, contact = true } = req.body;
 
   const options = {
-    from: "adarshpanditdev@gmail.com",
+    from: "guruscaterershyd@gmail.com",
     to: email,
     subject: subject,
-    text: message,
+    html: message,
+    attachments: [
+      {
+          filename: 'logo.png',
+          path: 'https://res.cloudinary.com/diaa9pw5r/image/upload/v1742900555/logo_3_qdbrzq.png',
+          cid: 'logoImg'
+      },
+      {
+        filename: 'scanner.png',
+        path: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.guruscaterers.com/menu',
+        cid: 'scannerImg'
+      }
+  ]
   }
+
+  const user = {
+    from: "guruscaterershyd@gmail.com",
+    to: "guruscaterershyd@gmail.com",
+    subject: "New Order from Guru's Website",
+    text: `A new order is arrived from our website!\n\nName: ${name}\nEmail: ${email}\nPlease check Dashboard for more details.`,
+  }
+
   transporter.sendMail(options, (err, info) => {
     if (err) {
       return res.status(500).send({ success: false, message: err.toString() });
     }
     res.status(200).send({ success: true, message: "Email sent: " + info.response });
   })
+
+  contact && (
+    transporter.sendMail(user, (err, info) => {
+      if (err) {
+        return res.status(500).send({ success: false, message: err.toString() });
+      }
+      res.status(200).send({ success: true, message: "Email sent to me: " + info.response });
+    })
+  )
+
 })
 
 

@@ -44,27 +44,23 @@ export const readAdmins = async () => {
 };
 
 export const readOrders = async () => {
-  const data = await orderModel.find();
+  const data = await orderModel.find().sort({ _id: -1 });
   return data;
 };
-// export const readUserOrdersById = async (userId) => {
-//   const data = await foodOrdersModel.findOne({ userId });
-//   return data;
-// };
 
 
 export const readCatogery = async () => {
-  const data = await catogeryModel.find()
+  const data = await catogeryModel.find().sort({ _id: -1 });
   return data;
 }
 
 export const readCorporateOrders = async () => {
-  const data = await OrderCorporateModel.find()
+  const data = await OrderCorporateModel.find().sort({ _id: -1 });
   return data;
 }
 
 export const readPackages = async () => {
-  const data = await PackageOrderModel.find()
+  const data = await PackageOrderModel.find().sort({ _id: -1 });
   return data;
 }
 export const readCorporate = async () => {
